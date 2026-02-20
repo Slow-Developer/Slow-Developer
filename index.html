@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>느린 개발자 — 가족 앱 만들기 도전</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f5f0e8;
+    --warm: #c8a96e;
+    --forest: #3d6b4f;
+    --rust: #b85c38;
+    --mist: #e8e0d5;
+    --sky: #7ba7bc;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+background-color: var(–paper);
+color: var(–ink);
+font-family: ‘Noto Sans KR’, sans-serif;
+overflow-x: hidden;
+}
+
+/* ─── HERO ─── */
+.hero {
+min-height: 100vh;
+display: grid;
+grid-template-columns: 1fr 1fr;
+position: relative;
+overflow: hidden;
+}
+
+.hero-left {
+background: var(–ink);
+display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 80px 60px;
+position: relative;
+z-index: 2;
+}
+
+.hero-left::after {
+content: ‘’;
+position: absolute;
+right: -40px;
+top: 0;
+bottom: 0;
+width: 80px;
+background: var(–ink);
+clip-path: polygon(0 0, 0 100%, 100% 100%);
+z-index: 3;
+}
+
+.site-tag {
+font-family: ‘Noto Sans KR’, sans-serif;
+font-size: 11px;
+font-weight: 500;
+letter-spacing: 4px;
+color: var(–warm);
+text-transform: uppercase;
+margin-bottom: 32px;
+opacity: 0;
+animation: fadeUp 0.8s ease forwards 0.2s;
+}
+
+.hero-title {
+font-family: ‘DM Serif Display’, serif;
+font-size: clamp(36px, 4vw, 56px);
+line-height: 1.1;
+color: #ffffff;
+margin-bottom: 8px;
+opacity: 0;
+animation: fadeUp 0.8s ease forwards 0.4s;
+}
+
+.hero-title .highlight {
+color: var(–warm);
+font-style: italic;
+}
+
+.hero-subtitle {
+font-family: ‘Noto Serif KR’, serif;
+font-size: clamp(18px, 2.5vw, 28px);
+color: var(–sky);
+line-height: 1.4;
+margin-bottom: 40px;
+opacity: 0;
+animation: fadeUp 0.8s ease forwards 0.6s;
+}
+
+.hero-desc {
+font-size: 14px;
+color: rgba(255,255,255,0.6);
+line-height: 1.8;
+max-width: 380px;
+opacity: 0;
+animation: fadeUp 0.8s ease forwards 0.8s;
+}
+
+.hero-right {
+position: relative;
+overflow: hidden;
+}
+
+.city-nature-bg {
+width: 100%;
+height: 100%;
+background:
+linear-gradient(180deg,
+rgba(26,26,46,0.3) 0%,
+rgba(61,107,79,0.4) 60%,
+rgba(200,169,110,0.3) 100%
+),
+url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘800’ height=‘800’ viewBox=‘0 0 800 800’%3E%3Crect width=‘800’ height=‘800’ fill=’%23516b7a’/%3E%3C!– Sky –%3E%3Crect width=‘800’ height=‘400’ fill=’%23a8c5d3’/%3E%3C!– Sun –%3E%3Ccircle cx=‘580’ cy=‘150’ r=‘60’ fill=’%23f5d76e’ opacity=‘0.9’/%3E%3C!– Clouds –%3E%3Cellipse cx=‘200’ cy=‘120’ rx=‘90’ ry=‘30’ fill=‘white’ opacity=‘0.7’/%3E%3Cellipse cx=‘300’ cy=‘110’ rx=‘60’ ry=‘22’ fill=‘white’ opacity=‘0.5’/%3E%3C!– Mountains/Hills –%3E%3Cellipse cx=‘400’ cy=‘420’ rx=‘500’ ry=‘120’ fill=’%233d6b4f’ opacity=‘0.9’/%3E%3Cellipse cx=‘150’ cy=‘430’ rx=‘200’ ry=‘90’ fill=’%232d5a3f’/%3E%3Cellipse cx=‘680’ cy=‘450’ rx=‘200’ ry=‘80’ fill=’%23345e44’/%3E%3C!– City Buildings –%3E%3Crect x=‘40’ y=‘260’ width=‘50’ height=‘180’ fill=’%231a1a2e’ opacity=‘0.85’/%3E%3Crect x=‘100’ y=‘230’ width=‘40’ height=‘210’ fill=’%231e2240’ opacity=‘0.9’/%3E%3Crect x=‘150’ y=‘250’ width=‘60’ height=‘190’ fill=’%23252b4a’ opacity=‘0.8’/%3E%3Crect x=‘650’ y=‘240’ width=‘55’ height=‘200’ fill=’%231a1a2e’ opacity=‘0.85’/%3E%3Crect x=‘710’ y=‘260’ width=‘45’ height=‘180’ fill=’%231e2240’ opacity=‘0.9’/%3E%3Crect x=‘760’ y=‘250’ width=‘40’ height=‘190’ fill=’%23252b4a’ opacity=‘0.8’/%3E%3C!– Windows –%3E%3Crect x=‘48’ y=‘270’ width=‘8’ height=‘8’ fill=’%23f5d76e’ opacity=‘0.8’/%3E%3Crect x=‘62’ y=‘270’ width=‘8’ height=‘8’ fill=’%23f5d76e’ opacity=‘0.5’/%3E%3Crect x=‘48’ y=‘288’ width=‘8’ height=‘8’ fill=’%23f5d76e’ opacity=‘0.6’/%3E%3Crect x=‘108’ y=‘240’ width=‘8’ height=‘8’ fill=’%23f5d76e’ opacity=‘0.7’/%3E%3Crect x=‘122’ y=‘240’ width=‘8’ height=‘8’ fill=’%23f5d76e’ opacity=‘0.4’/%3E%3Crect x=‘658’ y=‘250’ width=‘8’ height=‘8’ fill=’%23f5d76e’ opacity=‘0.8’/%3E%3Crect x=‘672’ y=‘250’ width=‘8’ height=‘8’ fill=’%23f5d76e’ opacity=‘0.5’/%3E%3Crect x=‘718’ y=‘270’ width=‘8’ height=‘8’ fill=’%23f5d76e’ opacity=‘0.7’/%3E%3C!– Trees –%3E%3Ccircle cx=‘320’ cy=‘380’ r=‘35’ fill=’%232d5a3f’/%3E%3Ccircle cx=‘360’ cy=‘390’ r=‘28’ fill=’%23345e44’/%3E%3Ccircle cx=‘450’ cy=‘375’ r=‘40’ fill=’%233d6b4f’/%3E%3Ccircle cx=‘490’ cy=‘385’ r=‘30’ fill=’%232d5a3f’/%3E%3C!– Road –%3E%3Crect x=‘0’ y=‘500’ width=‘800’ height=‘300’ fill=’%23c8a96e’ opacity=‘0.3’/%3E%3Cellipse cx=‘400’ cy=‘520’ rx=‘350’ ry=‘60’ fill=’%23b8956a’ opacity=‘0.5’/%3E%3C!– Family silhouette –%3E%3Ccircle cx=‘380’ cy=‘470’ r=‘18’ fill=’%231a1a2e’ opacity=‘0.7’/%3E%3Crect x=‘370’ y=‘488’ width=‘20’ height=‘35’ fill=’%231a1a2e’ opacity=‘0.7’/%3E%3Ccircle cx=‘420’ cy=‘468’ r=‘16’ fill=’%231a1a2e’ opacity=‘0.7’/%3E%3Crect x=‘411’ y=‘484’ width=‘18’ height=‘35’ fill=’%231a1a2e’ opacity=‘0.7’/%3E%3Ccircle cx=‘400’ cy=‘476’ r=‘12’ fill=’%231a1a2e’ opacity=‘0.7’/%3E%3Crect x=‘393’ y=‘488’ width=‘14’ height=‘28’ fill=’%231a1a2e’ opacity=‘0.7’/%3E%3C/svg%3E”) center/cover no-repeat;
+}
+
+.hero-overlay-text {
+position: absolute;
+bottom: 40px;
+right: 40px;
+text-align: right;
+opacity: 0;
+animation: fadeUp 1s ease forwards 1s;
+}
+
+.hero-overlay-text p {
+font-family: ‘Noto Serif KR’, serif;
+font-size: 13px;
+color: rgba(255,255,255,0.8);
+line-height: 2;
+}
+
+/* ─── NAV ─── */
+nav {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+z-index: 100;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 20px 60px;
+background: rgba(26,26,46,0.85);
+backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+font-family: ‘DM Serif Display’, serif;
+font-size: 18px;
+color: var(–warm);
+letter-spacing: 1px;
+}
+
+.nav-logo span {
+color: white;
+font-style: italic;
+}
+
+.nav-links {
+display: flex;
+gap: 36px;
+list-style: none;
+}
+
+.nav-links a {
+text-decoration: none;
+color: rgba(255,255,255,0.6);
+font-size: 13px;
+font-weight: 300;
+letter-spacing: 1px;
+transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(–warm); }
+
+/* ─── ABOUT STRIP ─── */
+.about-strip {
+background: var(–forest);
+padding: 60px;
+display: grid;
+grid-template-columns: 1fr 2px 1fr 2px 1fr;
+gap: 40px;
+align-items: center;
+}
+
+.divider { background: rgba(255,255,255,0.2); height: 60px; }
+
+.about-item {
+text-align: center;
+color: white;
+}
+
+.about-item .num {
+font-family: ‘DM Serif Display’, serif;
+font-size: 48px;
+color: var(–warm);
+line-height: 1;
+}
+
+.about-item p {
+font-size: 13px;
+opacity: 0.7;
+margin-top: 8px;
+letter-spacing: 1px;
+}
+
+/* ─── POSTS SECTION ─── */
+.posts-section {
+padding: 100px 80px;
+max-width: 1400px;
+margin: 0 auto;
+}
+
+.section-header {
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+margin-bottom: 60px;
+padding-bottom: 24px;
+border-bottom: 1px solid var(–warm);
+}
+
+.section-title {
+font-family: ‘DM Serif Display’, serif;
+font-size: 42px;
+color: var(–ink);
+}
+
+.section-title em {
+color: var(–forest);
+font-style: italic;
+}
+
+.section-sub {
+font-size: 13px;
+color: var(–warm);
+letter-spacing: 2px;
+text-transform: uppercase;
+}
+
+/* FEATURED POST */
+.featured-post {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0;
+background: var(–ink);
+margin-bottom: 40px;
+overflow: hidden;
+cursor: pointer;
+transition: transform 0.4s ease;
+}
+
+.featured-post:hover { transform: translateY(-4px); }
+
+.featured-image {
+background:
+linear-gradient(135deg, rgba(61,107,79,0.6), rgba(26,26,46,0.8)),
+url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘600’ height=‘400’%3E%3Crect width=‘600’ height=‘400’ fill=’%23516b7a’/%3E%3Ccircle cx=‘300’ cy=‘180’ r=‘80’ fill=’%23f5d76e’ opacity=‘0.2’/%3E%3Ctext x=‘50%25’ y=‘50%25’ dominant-baseline=‘middle’ text-anchor=‘middle’ font-size=‘120’ opacity=‘0.15’ fill=‘white’%3E🤔%3C/text%3E%3C/svg%3E”) center/cover;
+min-height: 380px;
+display: flex;
+align-items: flex-end;
+padding: 40px;
+position: relative;
+}
+
+.post-number {
+font-family: ‘DM Serif Display’, serif;
+font-size: 120px;
+color: rgba(255,255,255,0.06);
+position: absolute;
+top: -10px;
+left: 20px;
+line-height: 1;
+pointer-events: none;
+}
+
+.featured-image .tag {
+background: var(–rust);
+color: white;
+font-size: 11px;
+letter-spacing: 3px;
+text-transform: uppercase;
+padding: 6px 14px;
+position: absolute;
+top: 30px;
+left: 30px;
+}
+
+.featured-content {
+padding: 60px 50px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+.post-meta {
+font-size: 11px;
+letter-spacing: 3px;
+color: var(–warm);
+text-transform: uppercase;
+margin-bottom: 20px;
+}
+
+.post-title-main {
+font-family: ‘DM Serif Display’, serif;
+font-size: 32px;
+color: white;
+line-height: 1.2;
+margin-bottom: 20px;
+}
+
+.post-title-main em { color: var(–warm); font-style: italic; }
+
+.post-excerpt {
+font-family: ‘Noto Serif KR’, serif;
+font-size: 15px;
+color: rgba(255,255,255,0.65);
+line-height: 2;
+margin-bottom: 40px;
+}
+
+.read-btn {
+display: inline-flex;
+align-items: center;
+gap: 12px;
+color: var(–warm);
+font-size: 13px;
+letter-spacing: 2px;
+text-transform: uppercase;
+text-decoration: none;
+border-bottom: 1px solid var(–warm);
+padding-bottom: 6px;
+width: fit-content;
+transition: gap 0.3s;
+cursor: pointer;
+background: none;
+border-left: none;
+border-right: none;
+border-top: none;
+}
+
+.read-btn:hover { gap: 20px; }
+
+/* GRID POSTS */
+.posts-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 2px;
+background: var(–mist);
+}
+
+.post-card {
+background: var(–paper);
+padding: 40px 36px;
+transition: background 0.3s;
+cursor: pointer;
+position: relative;
+overflow: hidden;
+}
+
+.post-card::before {
+content: ‘’;
+position: absolute;
+left: 0;
+top: 0;
+bottom: 0;
+width: 3px;
+background: var(–warm);
+transform: scaleY(0);
+transition: transform 0.3s;
+}
+
+.post-card:hover::before { transform: scaleY(1); }
+.post-card:hover { background: white; }
+
+.card-num {
+font-family: ‘DM Serif Display’, serif;
+font-size: 60px;
+color: var(–mist);
+line-height: 1;
+margin-bottom: 16px;
+}
+
+.card-tag {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–rust);
+margin-bottom: 12px;
+display: block;
+}
+
+.card-title {
+font-family: ‘Noto Serif KR’, serif;
+font-size: 17px;
+font-weight: 600;
+color: var(–ink);
+line-height: 1.5;
+margin-bottom: 16px;
+}
+
+.card-excerpt {
+font-size: 13px;
+color: #666;
+line-height: 1.9;
+}
+
+.card-date {
+font-size: 11px;
+color: var(–warm);
+margin-top: 24px;
+letter-spacing: 2px;
+}
+
+/* MODAL */
+.modal-overlay {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(26,26,46,0.92);
+z-index: 1000;
+overflow-y: auto;
+padding: 60px 20px;
+}
+
+.modal-overlay.active { display: block; animation: fadeIn 0.3s ease; }
+
+.modal-content {
+max-width: 760px;
+margin: 0 auto;
+background: var(–paper);
+padding: 80px;
+position: relative;
+}
+
+.modal-close {
+position: absolute;
+top: 30px;
+right: 30px;
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+color: var(–ink);
+opacity: 0.5;
+transition: opacity 0.2s;
+}
+
+.modal-close:hover { opacity: 1; }
+
+.modal-tag {
+font-size: 11px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–rust);
+margin-bottom: 20px;
+display: block;
+}
+
+.modal-title {
+font-family: ‘DM Serif Display’, serif;
+font-size: 40px;
+color: var(–ink);
+line-height: 1.2;
+margin-bottom: 12px;
+}
+
+.modal-date {
+font-size: 12px;
+color: var(–warm);
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 40px;
+padding-bottom: 40px;
+border-bottom: 1px solid var(–mist);
+}
+
+.modal-body {
+font-family: ‘Noto Serif KR’, serif;
+font-size: 16px;
+line-height: 2.2;
+color: #333;
+}
+
+.modal-body p { margin-bottom: 24px; }
+
+.modal-body .highlight-box {
+background: var(–ink);
+color: var(–warm);
+padding: 24px 30px;
+margin: 32px 0;
+font-family: ‘DM Serif Display’, serif;
+font-size: 20px;
+font-style: italic;
+line-height: 1.5;
+border-left: 4px solid var(–warm);
+}
+
+.modal-body .code-box {
+background: var(–ink);
+color: #7ec8a4;
+padding: 20px 24px;
+font-family: monospace;
+font-size: 14px;
+line-height: 1.8;
+margin: 24px 0;
+border-radius: 2px;
+}
+
+/* ─── ABOUT SECTION ─── */
+.about-section {
+background: var(–ink);
+padding: 100px 80px;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+align-items: center;
+}
+
+.about-content h2 {
+font-family: ‘DM Serif Display’, serif;
+font-size: 48px;
+color: white;
+line-height: 1.1;
+margin-bottom: 30px;
+}
+
+.about-content h2 span { color: var(–warm); font-style: italic; }
+
+.about-content p {
+font-family: ‘Noto Serif KR’, serif;
+font-size: 15px;
+color: rgba(255,255,255,0.65);
+line-height: 2.1;
+margin-bottom: 20px;
+}
+
+.roadmap {
+display: flex;
+flex-direction: column;
+gap: 0;
+}
+
+.roadmap-item {
+display: flex;
+gap: 24px;
+padding: 28px 0;
+border-bottom: 1px solid rgba(255,255,255,0.08);
+position: relative;
+}
+
+.roadmap-step {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: ‘DM Serif Display’, serif;
+font-size: 16px;
+flex-shrink: 0;
+}
+
+.step-done { background: var(–forest); color: white; }
+.step-current { background: var(–warm); color: var(–ink); }
+.step-future { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); }
+
+.roadmap-text h4 {
+font-size: 15px;
+font-weight: 500;
+color: white;
+margin-bottom: 6px;
+}
+
+.roadmap-text p {
+font-size: 13px;
+color: rgba(255,255,255,0.45);
+line-height: 1.6;
+margin: 0;
+}
+
+/* ─── FOOTER ─── */
+footer {
+background: #111120;
+padding: 60px 80px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.footer-logo {
+font-family: ‘DM Serif Display’, serif;
+font-size: 22px;
+color: var(–warm);
+}
+
+.footer-logo span { color: white; font-style: italic; }
+
+footer p {
+font-size: 12px;
+color: rgba(255,255,255,0.3);
+letter-spacing: 1px;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(24px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+.hero { grid-template-columns: 1fr; }
+.hero-right { display: none; }
+.hero-left { padding: 120px 36px 80px; }
+.hero-left::after { display: none; }
+nav { padding: 16px 30px; }
+.nav-links { display: none; }
+.posts-section { padding: 60px 30px; }
+.posts-grid { grid-template-columns: 1fr; }
+.featured-post { grid-template-columns: 1fr; }
+.about-section { grid-template-columns: 1fr; padding: 60px 30px; }
+.about-strip { grid-template-columns: 1fr; }
+.divider { display: none; }
+footer { flex-direction: column; gap: 20px; text-align: center; padding: 40px 30px; }
+.modal-content { padding: 50px 30px; }
+.modal-title { font-size: 28px; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- NAV -->
+
+<nav>
+  <div class="nav-logo">느린 개발자 <span>Slow Developer</span></div>
+  <ul class="nav-links">
+    <li><a href="#posts">블로그</a></li>
+    <li><a href="#about">소개</a></li>
+    <li><a href="#roadmap">로드맵</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="hero-left">
+    <p class="site-tag">📖 코딩 도전기 블로그</p>
+    <h1 class="hero-title">
+      느린 개발자<br>
+      <span class="highlight">Slow Developer</span>
+    </h1>
+    <p class="hero-subtitle">가족 앱 만들기 도전</p>
+    <p class="hero-desc">코딩이 뭔지도 몰랐던 평범한 사람이, AI와 함께 가족 모두가 쓸 수 있는 스케줄 앱을 만들어가는 진짜 이야기. 느려도 괜찮아요 — 실패도, 부끄러움도, 작은 성공도 모두 여기 기록합니다.</p>
+  </div>
+  <div class="hero-right">
+    <div class="city-nature-bg"></div>
+    <div class="hero-overlay-text">
+      <p>도시의 세련됨과</p>
+      <p>가족의 따뜻함 사이</p>
+      <p>나의 도전이 시작됩니다</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+
+<div class="about-strip">
+  <div class="about-item">
+    <div class="num">0</div>
+    <p>코딩 경력 (일)</p>
+  </div>
+  <div class="divider"></div>
+  <div class="about-item">
+    <div class="num">1</div>
+    <p>완성할 가족 앱</p>
+  </div>
+  <div class="divider"></div>
+  <div class="about-item">
+    <div class="num">∞</div>
+    <p>AI와 함께하는 가능성</p>
+  </div>
+</div>
+
+<!-- POSTS -->
+
+<section class="posts-section" id="posts">
+  <div class="section-header">
+    <h2 class="section-title">도전 <em>일기</em></h2>
+    <span class="section-sub">Challenge Log</span>
+  </div>
+
+  <!-- FEATURED -->
+
+  <div class="featured-post" onclick="openModal('post1')">
+    <div class="featured-image">
+      <div class="post-number">01</div>
+      <div class="tag">✍️ 첫 번째 글</div>
+    </div>
+    <div class="featured-content">
+      <p class="post-meta">Day 1 · 2025년 2월 19일</p>
+      <h2 class="post-title-main">부끄러웠지만 AI에게 물어봤다.<br><em>"코딩이 머야?"</em></h2>
+      <p class="post-excerpt">
+        평생 코딩이라는 단어를 듣기만 했지, 한 번도 내 일이라고 생각해본 적이 없었다. 근데 어느 날 문득 — 우리 가족이 함께 쓸 수 있는 스케줄 앱, 내가 직접 만들어보면 어떨까 하는 생각이 들었다. 용기를 내어 AI한테 물어봤다. "코딩이 머야?"
+      </p>
+      <button class="read-btn">읽기 →</button>
+    </div>
+  </div>
+
+  <!-- GRID -->
+
+  <div class="posts-grid">
+    <div class="post-card" onclick="openModal('post2')">
+      <div class="card-num">02</div>
+      <span class="card-tag">🗺️ 다음 예정</span>
+      <h3 class="card-title">HTML이 뭔지 처음 배운 날</h3>
+      <p class="card-excerpt">웹사이트는 어떻게 만들어지는 걸까? HTML, CSS, JavaScript... 이름만 들어도 어지러운 세 친구를 소개받다.</p>
+      <p class="card-date">곧 업로드 예정</p>
+    </div>
+
+```
+<div class="post-card" onclick="openModal('post3')">
+  <div class="card-num">03</div>
+  <span class="card-tag">🛠️ 다음 예정</span>
+  <h3 class="card-title">첫 번째 버튼을 만들어봤다</h3>
+  <p class="card-excerpt">화면에 글자 하나 나타났을 때의 그 짜릿함. 작은 버튼 하나였지만, 내가 만든 것이었다.</p>
+  <p class="card-date">곧 업로드 예정</p>
+</div>
+
+<div class="post-card" onclick="openModal('post4')">
+  <div class="card-num">04</div>
+  <span class="card-tag">📅 다음 예정</span>
+  <h3 class="card-title">가족 스케줄 앱 설계 시작</h3>
+  <p class="card-excerpt">우리 가족은 어떤 기능이 필요할까? AI와 함께 앱의 밑그림을 그려보는 시간.</p>
+  <p class="card-date">곧 업로드 예정</p>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+
+<section class="about-section" id="about">
+  <div class="about-content">
+    <h2>왜 이 블로그를<br><span>시작했냐고요?</span></h2>
+    <p>저는 코딩과는 전혀 상관없는 삶을 살아왔어요. 그런데 문득 생각했습니다. 우리 가족이 서로의 일정을 한눈에 볼 수 있는 앱, 직접 만들 수 있지 않을까?</p>
+    <p>AI가 있으니까요. 코딩을 몰라도, AI에게 물어물어 가며 함께 만들어가는 이 과정을 솔직하게 기록하고 싶었어요. 저처럼 코딩이 두려운 분들께 "나도 할 수 있겠는데?" 하는 용기를 드리고 싶습니다.</p>
+  </div>
+  <div class="roadmap" id="roadmap">
+    <div class="roadmap-item">
+      <div class="roadmap-step step-done">✓</div>
+      <div class="roadmap-text">
+        <h4>Step 1 · 코딩이 뭔지 알아보기</h4>
+        <p>AI에게 처음으로 "코딩이 머야?" 라고 물어본 날. 완료!</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-step step-current">2</div>
+      <div class="roadmap-text">
+        <h4>Step 2 · 첫 번째 웹사이트 만들기</h4>
+        <p>바로 지금 이 순간! 이 블로그가 그 첫 번째 결과물입니다.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-step step-future">3</div>
+      <div class="roadmap-text">
+        <h4>Step 3 · HTML/CSS 기초 배우기</h4>
+        <p>웹사이트의 뼈대와 옷입히기를 배웁니다.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-step step-future">4</div>
+      <div class="roadmap-text">
+        <h4>Step 4 · 가족 스케줄 앱 만들기</h4>
+        <p>최종 목표! 가족 모두가 함께 쓸 수 있는 앱 완성.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="footer-logo">느린 개발자 <span>Slow Developer</span></div>
+  <p>느린 개발자 Slow Developer — 가족 앱 만들기 도전 · 2026</p>
+</footer>
+
+<!-- MODAL: POST 1 -->
+
+<div class="modal-overlay" id="modal-post1" onclick="closeModalOutside(event)">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('post1')">✕</button>
+    <span class="modal-tag">✍️ 첫 번째 글 · Day 1</span>
+    <h1 class="modal-title">부끄러웠지만 AI에게 물어봤다. "코딩이 머야?"</h1>
+    <p class="modal-date">2025년 2월 19일 · 잼미니</p>
+    <div class="modal-body">
+      <p>오늘 처음으로 AI한테 물어봤다. "코딩이 머야?" 타이핑하면서도 좀 부끄러웠다. 이런 것도 모르면서 앱을 만들겠다고 한 건가 싶기도 하고.</p>
+
+```
+  <div class="highlight-box">"코딩이란 컴퓨터한테 일을 시키는 특별한 언어예요."</div>
+
+  <p>AI가 이렇게 알려줬다. 생각보다 엄청 어렵거나 무서운 개념이 아니었다. 우리가 일상에서 쓰는 유튜브, 카카오톡, 쇼핑몰... 이 모든 게 다 누군가가 코딩으로 만든 것이라고 했다. 그 말을 듣고 나니 왠지 모르게 가슴이 두근거렸다.</p>
+
+  <p>코딩 언어도 여러 종류가 있는데, 입문자한테는 Python(파이썬)이 제일 좋다고 했다. 하지만 나는 일단 웹사이트부터 만들어보고 싶었다. 그래서 HTML부터 시작하기로 했다.</p>
+
+  <div class="highlight-box">"코딩을 몰라도 AI와 함께라면 만들 수 있다."</div>
+
+  <p>그리고 놀라운 일이 일어났다. AI가 오늘 이 대화를 하면서 — 그러니까 지금 내가 처음으로 코딩에 대해 물어보는 이 순간을 기록하는 블로그를 바로 만들어줬다. 이게 바로 이 페이지다.</p>
+
+  <p>코딩도 모르는 내가, AI와 함께, 진짜 웹사이트를 보고 있다. 이게 무슨 일인지 아직도 실감이 잘 안 나지만... 일단 시작은 했다. 다음 글에선 HTML이 뭔지 알아볼 예정이다.</p>
+
+  <div class="code-box">
+    # 오늘 배운 것<br>
+    코딩 = 컴퓨터에게 일을 시키는 언어<br>
+    AI = 코딩 모르는 나의 선생님이자 파트너<br>
+    나 = 이제 막 시작한 초보 중의 초보
+  </div>
+
+  <p>부끄럽지만, 이 블로그가 언젠가 나처럼 코딩이 두려운 누군가에게 작은 용기가 되길 바란다. 🌱</p>
+</div>
+```
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-post2" onclick="closeModalOutside(event)">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('post2')">✕</button>
+    <span class="modal-tag">🗺️ 준비 중</span>
+    <h1 class="modal-title">HTML이 뭔지 처음 배운 날</h1>
+    <p class="modal-date">곧 업로드됩니다 · 잼미니</p>
+    <div class="modal-body">
+      <p>이 글은 아직 작성 중이에요. 다음 도전을 마치고 돌아올게요! 조금만 기다려 주세요 😊</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-post3" onclick="closeModalOutside(event)">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('post3')">✕</button>
+    <span class="modal-tag">🛠️ 준비 중</span>
+    <h1 class="modal-title">첫 번째 버튼을 만들어봤다</h1>
+    <p class="modal-date">곧 업로드됩니다 · 잼미니</p>
+    <div class="modal-body">
+      <p>이 글은 아직 작성 중이에요. 다음 도전을 마치고 돌아올게요! 조금만 기다려 주세요 😊</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-post4" onclick="closeModalOutside(event)">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('post4')">✕</button>
+    <span class="modal-tag">📅 준비 중</span>
+    <h1 class="modal-title">가족 스케줄 앱 설계 시작</h1>
+    <p class="modal-date">곧 업로드됩니다 · 잼미니</p>
+    <div class="modal-body">
+      <p>이 글은 아직 작성 중이에요. 다음 도전을 마치고 돌아올게요! 조금만 기다려 주세요 😊</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal(id) {
+    document.getElementById('modal-' + id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(id) {
+    document.getElementById('modal-' + id).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function closeModalOutside(e) {
+    if (e.target.classList.contains('modal-overlay')) {
+      e.target.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active').forEach(m => {
+        m.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
