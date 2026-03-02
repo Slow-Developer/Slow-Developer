@@ -678,15 +678,44 @@
 
   .cal-photo-bg .photo-icon { font-size: 36px; opacity: 0.5; }
 
-  .cal-body { padding: 24px 36px 36px; }
+  .cal-body {
+    padding: 24px 36px 36px;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .cal-body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.75);
+    z-index: 0;
+  }
+
+  .cal-weekdays,
+  .cal-days,
+  .cal-legend {
+    position: relative;
+    z-index: 1;
+  }
+
+  .day-num {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   .cal-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     margin-bottom: 8px;
   }
-
-  .cal-weekday {
     text-align: center;
     font-size: 12px;
     font-weight: 500;
@@ -743,21 +772,14 @@
     margin-top: 2px;
   }
 
-  .day-num {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--ink);
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  .sunday .day-num { color: #e74c3c; }
+  .saturday .day-num { color: var(--sky); }
 
   .day-lunar {
     font-size: 9px;
-    color: #bbb;
+    color: #666;
     margin-top: 1px;
+    font-weight: 500;
   }
 
   .day-holiday {
@@ -767,12 +789,10 @@
     margin-top: 1px;
     max-width: 100%;
     overflow: hidden;
+    font-weight: 700;
   }
-  .day-holiday.kr-holiday { color: #e74c3c; font-weight:600; }
-  .day-holiday.jp-holiday { color: #2980b9; font-weight:600; }
-
-  .sunday .day-num { color: #e74c3c; }
-  .saturday .day-num { color: var(--sky); }
+  .day-holiday.kr-holiday { color: #c0392b; }
+  .day-holiday.jp-holiday { color: #1a5276; }
 
   .cal-day.holiday .day-num { color: #e74c3c; }
 
@@ -976,7 +996,13 @@
   /* ─── RESPONSIVE ─── */
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; }
-    .hero-right { display: none; }
+    .hero-right {
+      display: block;
+      height: 280px;
+      width: 100%;
+    }
+    .hero-left::after { display: none; }
+  }
     .hero-left { padding: 120px 36px 80px; }
     .hero-left::after { display: none; }
     nav { padding: 16px 30px; }
@@ -1197,12 +1223,9 @@
       <button class="cal-nav-btn" onclick="changeMonth(1)">▶</button>
     </div>
 
-    <div class="cal-photo-bg" id="cal-photo">
-      <div class="photo-icon">📷</div>
-      <p>이 달의 가족 사진을 등록해보세요</p>
-    </div>
+    <div class="cal-photo-bg" id="cal-photo" style="display:none"></div>
 
-    <div class="cal-body">
+    <div class="cal-body" id="cal-body-inner">
       <div class="cal-weekdays">
         <div class="cal-weekday">일</div>
         <div class="cal-weekday">월</div>
@@ -1478,25 +1501,27 @@
 
 <script>
   function getCalendarPhoto(month) {
-    const availablePhotos = ['01','02','04','05','07','11'];
-    const m = String(month).padStart(2,'0');
-    if (availablePhotos.includes(m)) {
-      return `cal-${m}.jpg`;
-    }
-    return null;
+    const photoMap = {
+      1:'cal-01.jpg', 2:'cal-02.jpg', 3:'cal-02.jpg',
+      4:'cal-04.jpg', 5:'cal-05.jpg', 6:'cal-05.jpg',
+      7:'cal-07.jpg', 8:'cal-07.jpg', 9:'cal-07.jpg',
+      10:'cal-07.jpg', 11:'cal-11.jpg', 12:'cal-11.jpg'
+    };
+    return photoMap[month] || null;
   }
 
   function updateCalendarPhoto(month) {
     const photo = getCalendarPhoto(month);
+    const bodyEl = document.getElementById('cal-body-inner');
     const photoEl = document.getElementById('cal-photo');
+    photoEl.style.display = 'none';
     if (photo) {
-      photoEl.style.backgroundImage = `url('${photo}')`;
-      photoEl.style.backgroundSize = 'cover';
-      photoEl.style.backgroundPosition = 'center';
-      photoEl.innerHTML = '';
+      bodyEl.style.backgroundImage = `url('${photo}')`;
+      bodyEl.style.backgroundSize = 'cover';
+      bodyEl.style.backgroundPosition = 'center';
+      bodyEl.style.position = 'relative';
     } else {
-      photoEl.style.backgroundImage = '';
-      photoEl.innerHTML = '<div class="photo-icon">📷</div><p>이 달의 가족 사진을 등록해보세요</p>';
+      bodyEl.style.backgroundImage = '';
     }
   }
 
@@ -1541,9 +1566,9 @@
     [2,1,12,14],[2,2,12,15],[2,3,12,16],[2,4,12,17],[2,5,12,18],
     [2,6,12,19],[2,7,12,20],[2,8,12,21],[2,9,12,22],[2,10,12,23],
     [2,11,12,24],[2,12,12,25],[2,13,12,26],[2,14,12,27],[2,15,12,28],
-    [2,16,12,29],[2,17,12,30],[2,18,1,1],[2,19,1,2],[2,20,1,3],
-    [2,21,1,4],[2,22,1,5],[2,23,1,6],[2,24,1,7],[2,25,1,8],
-    [2,26,1,9],[2,27,1,10],[2,28,1,11],
+    [2,16,12,29],[2,17,1,1],[2,18,1,2],[2,19,1,3],[2,20,1,4],
+    [2,21,1,5],[2,22,1,6],[2,23,1,7],[2,24,1,8],[2,25,1,9],
+    [2,26,1,10],[2,27,1,11],[2,28,1,12],
     [3,1,1,12],[3,2,1,13],[3,3,1,14],[3,4,1,15],[3,5,1,16],
     [3,6,1,17],[3,7,1,18],[3,8,1,19],[3,9,1,20],[3,10,1,21],
     [3,11,1,22],[3,12,1,23],[3,13,1,24],[3,14,1,25],[3,15,1,26],
