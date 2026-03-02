@@ -1155,12 +1155,12 @@
       <p class="card-excerpt">달력을 만들면서 처음으로 CSS와 JavaScript를 접했다. 뼈대, 옷, 움직임 — 이 세 가지가 웹사이트를 만든다.</p>
       <p class="card-date">2026년 2월 24일</p>
     </div>
-    <div class="post-card">
+    <div class="post-card" onclick="openModal('post6')">
       <div class="card-num">06</div>
-      <span class="card-tag">🔜 다음 예정</span>
-      <h3 class="card-title">로그인 기능 추가 도전</h3>
-      <p class="card-excerpt">가족만 접근할 수 있도록 로그인 시스템을 넣어보자. 과연 잘 될까?</p>
-      <p class="card-date">곧 업로드 예정</p>
+      <span class="card-tag">📸 달력 진화 중</span>
+      <h3 class="card-title">달력에 가족 사진을 입히다!</h3>
+      <p class="card-excerpt">음력 오류 수정, 공휴일 색상 구분, 사진 배경 오버레이까지. GitHub Pages 이전도 완료. 달력이 점점 진짜 앱처럼 되어가고 있다.</p>
+      <p class="card-date">2026년 3월 2일</p>
     </div>
     <div class="post-card">
       <div class="card-num">07</div>
@@ -1499,13 +1499,55 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-post6" onclick="closeModalOutside(event)">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('post6')">✕</button>
+    <span class="modal-tag">📸 달력 진화 중 · Day 6</span>
+    <h1 class="modal-title">달력에 가족 사진을 입히다!</h1>
+    <p class="modal-date">2026년 3월 2일 · 느린 개발자</p>
+    <div class="modal-body">
+      <p>달력을 만들고 나서 바로 여러 문제들이 발견됐다. 음력이 틀리고, 공휴일 색이 비슷하고, 사진도 안 들어가고. 하나씩 고쳐나갔다.</p>
+
+      <div class="highlight-box">음력 날짜가 틀렸다!</div>
+
+      <p>2026년 2월 17일이 음력 1월 1일 구정인데, 달력에는 2월 18일로 나왔다. 하루가 틀린 거다. 이건 내가 발견한 게 아니라 직접 써보면서 알게 됐다. AI한테 수정 요청했더니 2026년 전체 음력 데이터를 정확하게 교체해줬다. 이제 구정, 초하루, 보름 같은 특별한 날도 제대로 표시된다.</p>
+
+      <div class="highlight-box">공휴일 색 구분!</div>
+
+      <p>한국 공휴일과 일본 공휴일이 둘 다 빨간색 계열이라 구분이 잘 안 됐다. 한국은 빨간색, 일본은 파란색으로 바꿨다. 이제 한눈에 구분된다.</p>
+
+      <div class="highlight-box">사진이 달력 배경으로!</div>
+
+      <p>처음엔 사진을 달력 위에 따로 배치했는데, 달력 배경으로 깔고 그 위에 날짜를 표시하는 방식으로 바꿨다. 사진이 너무 진하면 숫자가 안 보이니까 반투명 흰색 레이어를 얹었다. 12달 사진을 모두 준비해서 매달 다른 가족 사진이 배경으로 나온다.</p>
+
+      <div class="highlight-box">Netlify에서 GitHub Pages로 이전!</div>
+
+      <p>Netlify 무료 플랜 용량을 초과해버렸다. 사진과 음악 파일이 많아지면서 대역폭을 너무 많이 썼다. GitHub Pages로 이전했다. GitHub 저장소에 파일을 업로드하고 Settings에서 Pages를 활성화하면 끝. URL이 조금 길어졌지만 완전 무료에 용량도 넉넉하다.</p>
+
+      <p>그리고 모바일에서 홈 화면 사진이 안 보이는 문제도 발견해서 수정했다. PC에서는 잘 보이는데 스마트폰에서는 숨겨져 있었다. CSS 코드 한 줄 때문이었다. 이런 게 바로 코딩의 세계다. 눈에 안 보이는 작은 설정 하나가 전혀 다른 결과를 만든다.</p>
+
+      <p>달력이 점점 진짜 앱처럼 되어가고 있다. 느리지만, 분명히 나아가고 있다. 🌱</p>
+
+      <div class="code-box">
+        # 이번에 수정한 것들<br>
+        1. 음력 날짜 정확한 데이터로 교체<br>
+        2. 한국 공휴일 빨간색 / 일본 파란색 구분<br>
+        3. 달력 배경 사진 오버레이 방식으로 변경<br>
+        4. 12달 전체 가족 사진 등록<br>
+        5. Netlify → GitHub Pages 이전<br>
+        6. 모바일 사진 표시 오류 수정
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   function getCalendarPhoto(month) {
     const photoMap = {
-      1:'cal-01.jpg', 2:'cal-02.jpg', 3:'cal-02.jpg',
-      4:'cal-04.jpg', 5:'cal-05.jpg', 6:'cal-05.jpg',
-      7:'cal-07.jpg', 8:'cal-07.jpg', 9:'cal-07.jpg',
-      10:'cal-07.jpg', 11:'cal-11.jpg', 12:'cal-11.jpg'
+      1:'cal-01.jpg', 2:'cal-02.jpg', 3:'cal-03.jpg',
+      4:'cal-04.jpg', 5:'cal-05.jpg', 6:'cal-06.jpg',
+      7:'cal-07.jpg', 8:'cal-08.jpg', 9:'cal-09.jpg',
+      10:'cal-10.jpg', 11:'cal-11.jpg', 12:'cal-12.jpg'
     };
     return photoMap[month] || null;
   }
